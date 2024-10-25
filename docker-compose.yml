@@ -1,0 +1,151 @@
+services:
+  # Portainer (Docker Management UI)
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: unless-stopped
+    ports:
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /path/to/portainer/data:/data # Make sure to change this to the correct directory
+
+  # Jellyfin (Media Server)
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    network_mode: host
+    ports:
+      - "8096:8096"
+    volumes:
+      # Provide access to all relevant directories, make sure to change these to the correct directories
+      - /path/to/torrents/complete:/other-media # Torrent downloads
+      - /path/to/media:/media # Media directory
+      - /path/to/jellyfin/config:/config # Config directory
+      - /path/to/jellyfin/cache:/cache # Cache directory
+    restart: unless-stopped
+
+  # Transmission (Torrent Client)
+  transmission:
+    image: linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Your/timezone
+    volumes:
+      # Provide access to all relevant directories, make sure to change these to the correct directories
+      - /path/to/transmission/config:/config # Config directory
+      - /path/to/torrents:/downloads # Torrent downloads
+      - /path/to/torrents-watch:/watch # Torrent watch folder
+    ports:
+      - "9091:9091" # Web UI
+      - "51413:51413" # Torrent port
+    restart: unless-stopped
+
+  # Minecraft Server
+  minecraft-server:
+    image: itzg/minecraft-server:latest
+    container_name: minecraft-server
+    ports:
+      - "25565:25565" # Minecraft port
+    environment:
+      SERVER_NAME: "Minecraft-Server"
+      MOTD: "Minecraft Server"
+      EULA: "TRUE"
+      MODE: "survival"
+      MEMORY: "1G"
+      LEVEL_TYPE: "DEFAULT"
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: "your-password"
+      RCON_PORT: 28016
+      SERVER_PORT: 25565
+      MAX_PLAYERS: 20
+      ANNOUNCE_PLAYER_ACHIEVEMENTS: "true"
+      SPAWN_ANIMALS: "true"
+      SPAWN_MONSTERS: "true"
+      PVP: "true"
+      LEVEL: "cold"
+      REMOVE_OLD_MODS: "true"
+    restart: unless-stopped
+    user: "${UID}:${GID}"
+    volumes:
+      # Provide access to all relevant directories, make sure to change these to the correct directories
+      - /path/to/minecraft/data:/data # Minecraft data directory
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+
+  # Samba (File Sharing)
+  samba:
+    image: dperson/samba
+    container_name: samba
+    restart: unless-stopped
+    ports:
+      - "137:137/udp"
+      - "138:138/udp"
+      - "139:139/tcp"
+      - "445:445/tcp"
+    volumes:
+      # Provide access to all relevant directories for sharing
+      - /path/to/samba/smb.conf:/etc/samba/smb.conf
+      - /path/to:/server-shared
+    command: "-u 'your-username;your-password'"
+
+  # Homer (Home Dashboard)
+  homer:
+    image: b4bz/homer:latest
+    container_name: homer
+    ports:
+      - "8080:8080"
+    volumes:
+      - /path/to/homer/config:/www/assets # Config and bookmarks
+    restart: unless-stopped
+
+  # Sonarr (TV Show Manager)
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Your/timezone
+    volumes:
+      - /path/to/sonarr/config:/config
+      - /path/to/tv-shows:/tv # TV shows directory
+      - /path/to/torrents:/downloads # Access to torrents directory for downloads
+    ports:
+      - "8989:8989"
+    restart: unless-stopped
+
+  # Radarr (Movie Manager)
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Your/timezone
+    volumes:
+      - /path/to/radarr/config:/config
+      - /path/to/movies:/movies # Movies directory
+      - /path/to/torrents:/downloads # Access to torrents directory for downloads
+    ports:
+      - "7878:7878"
+    restart: unless-stopped
+
+  # OpenBooks (Book Library)
+  openbooks:
+    image: linuxserver/calibre
+    container_name: openbooks
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Your/timezone
+    volumes:
+      - /path/to/openbooks/config:/config
+      - /path/to/books:/books # Books directory
+    ports:
+      - "8081:8080" # Change the internal port to 8080
+    restart: unless-stopped
