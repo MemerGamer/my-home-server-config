@@ -10,6 +10,7 @@ This is a simple docker compose configuration to set up a home server with:
 - Sonarr
 - Radarr
 - OpenBooks
+- Kiwix
 
 ## Prerequisites
 
