@@ -9,6 +9,7 @@ This is a simple docker compose configuration to set up a home server with:
 - Homer
 - Sonarr
 - Radarr
+- Calibre
 - OpenBooks
 - Kiwix
 - Uptime Kuma
