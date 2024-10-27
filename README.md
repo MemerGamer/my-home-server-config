@@ -11,6 +11,7 @@ This is a simple docker compose configuration to set up a home server with:
 - Radarr
 - OpenBooks
 - Kiwix
+- Uptime Kuma
 
 ## Prerequisites
 
