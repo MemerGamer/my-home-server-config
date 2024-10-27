@@ -135,10 +135,10 @@ services:
       - "7878:7878"
     restart: unless-stopped
 
-  # OpenBooks (Book Library)
-  openbooks:
+  # Calibre (Book Library)
+  calibre:
     image: linuxserver/calibre
-    container_name: openbooks
+    container_name: calibre
     environment:
       - PUID=1000
       - PGID=1000
@@ -148,6 +148,17 @@ services:
       - /path/to/books:/books # Books directory
     ports:
       - "8081:8080" # Change the internal port to 8080
+    restart: unless-stopped
+  
+  # OpenBooks (Book Library)
+  openbooks:
+    image: evanbuss/openbooks
+    container_name: openbooks
+    ports:
+      - "8083:80"
+    volumes:
+      - /path/to:/books/books # Books directory
+    command: "--persist --name your-user-name"
     restart: unless-stopped
   
   # Kiwix (Wiki)
