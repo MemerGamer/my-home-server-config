@@ -157,8 +157,8 @@ services:
     ports:
       - "8083:80"
     volumes:
-      - /path/to:/books/books # Books directory
-    command: "--persist --name your-user-name"
+      - /path/to:/books # Books directory
+    command: "--persist --name your-user-name -s irc.irchighway.net:9999"
     restart: unless-stopped
   
   # Kiwix (Wiki)
